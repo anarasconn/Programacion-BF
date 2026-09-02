@@ -2,7 +2,7 @@ const course = {
   name: "Programación Backend con Frameworks",
   environment: "Visual Studio Code",
   packageManager: "PNPM",
-  status: "Configurado",
+  status: "configuracion",
 };
 function createSummary(data) {
   return `${data.name}: entorno ${data.status.toLowerCase()}`;

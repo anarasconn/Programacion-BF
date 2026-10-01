@@ -1,0 +1,31 @@
+# Reflexión — EC1 F1 A2
+
+**Nombre:ANA CRISTINA RASCON OCOHA
+**Grupo:001
+
+## 1. Función de Node.js
+Node.js sirve para ejecutar JavaScript fuera del navegador. En este proyecto ejecuta la aplicación de consola, lee la variable APP_NAME con process.env y corre el código compilado con pnpm serve.
+
+## 2. Aportes de TypeScript
+TypeScript detecta errores antes de ejecutar el programa. Por ejemplo, avisa si a una tarea le falta una propiedad como title, si el status no es "pending" o "completed", o si un valor puede ser undefined.
+
+## 3. Separación en models, data, services y utils
+Se separaron para que cada carpeta tenga una sola responsabilidad. En models está la forma de la tarea, en data están las tareas en memoria, en services están las reglas (crear, completar, eliminar) y en utils las funciones reutilizables como delay. Así el código es más ordenado y fácil de mantener.
+
+## 4. Función síncrona vs. función async
+Una función síncrona se ejecuta y da su resultado de inmediato. Una función async devuelve una promesa y permite esperar con await. Por ejemplo, main es async porque espera a delay(300) antes de continuar.
+
+## 5. Por qué findTaskById devuelve Task | undefined
+Porque la búsqueda puede no encontrar ninguna tarea con ese id. TypeScript nos obliga a revisar si el resultado existe antes de usarlo, como se hace en completeTask con if (!task).
+
+## 6. Ventaja de leer APP_NAME desde process.env
+Permite cambiar la configuración sin modificar el código. Lo comprobé ejecutando el programa con APP_NAME="Gestor de tareas UES" y el nombre cambió. También sirve para guardar datos sensibles, como contraseñas, fuera del repositorio.
+
+## 7. pnpm start vs. pnpm build + pnpm serve
+pnpm start ejecuta directamente los archivos TypeScript con tsx y se usa mientras se desarrolla. pnpm build compila el código a JavaScript en la carpeta dist y pnpm serve lo ejecuta con Node.js. La salida en consola fue la misma en los dos casos.
+
+## 8. Qué se reutilizará con Express
+Se podrán reutilizar models, data y services, porque contienen la lógica de las tareas. Lo que cambiará es index.ts, que dejará de mostrar resultados en la consola y pasará a exponer esas funciones como rutas HTTP.
+
+## Pregunta del Paso 19
+title es el texto tal como lo escribe el usuario, con posibles espacios al inicio o al final. cleanTitle es el mismo texto ya limpiado con trim(). Conviene normalizar la entrada para evitar títulos con espacios de más o títulos vacíos.

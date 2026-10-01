@@ -1,9 +1,16 @@
-import { createTask, completeTask, listTasks } from './services/task.service.js';
+import {
+  createTask,
+  completeTask,
+  deleteTask,
+  listPendingTasks,
+  listTasks
+} from './services/task.service.js';
+import type { Task } from './models/task.js';
 import { delay } from './utils/delay.js';
 import { getAppName } from './utils/env.js';
 
-const showTasks = (): void => {
-  const rows = listTasks().map((task) => ({
+const showTasks = (items: readonly Task[] = listTasks()): void => {
+  const rows = items.map((task) => ({
     id: task.id,
     title: task.title,
     status: task.status,
@@ -12,6 +19,9 @@ const showTasks = (): void => {
 
   console.table(rows);
 };
+
+const getErrorMessage = (error: unknown): string =>
+  error instanceof Error ? error.message : 'Ocurrió un error desconocido.';
 
 const main = async (): Promise<void> => {
   console.log(`\n${getAppName()}`);
@@ -33,11 +43,27 @@ const main = async (): Promise<void> => {
   try {
     completeTask(999);
   } catch (error: unknown) {
-    const message = error instanceof Error
-      ? error.message
-      : 'Ocurrió un error desconocido.';
-    console.error(`Error controlado: ${message}`);
+    console.error(`Error controlado: ${getErrorMessage(error)}`);
   }
+
+  console.log('\nTareas pendientes');
+  showTasks(listPendingTasks());
+
+  try {
+    const deleted = deleteTask(newTask.id);
+    console.log(`Tarea ${deleted.id} eliminada correctamente.`);
+  } catch (error: unknown) {
+    console.error(`Error controlado: ${getErrorMessage(error)}`);
+  }
+
+  try {
+    deleteTask(999);
+  } catch (error: unknown) {
+    console.error(`Error controlado: ${getErrorMessage(error)}`);
+  }
+
+  console.log('\nLista después de eliminar');
+  showTasks();
 };
 
 main().catch((error: unknown) => {
